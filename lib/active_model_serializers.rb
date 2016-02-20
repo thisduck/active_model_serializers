@@ -12,7 +12,10 @@ begin
   ActiveSupport.on_load(:action_controller) do
     if ::ActionController::Serialization.enabled
       ActionController::Base.send(:include, ::ActionController::Serialization)
-      ActionController::TestCase.send(:include, ::ActionController::SerializationAssertions)
+      # we're using this in rails anyway, so it shouldn't be problematic.
+      if Rails.env.test?
+        ActionController::TestCase.send(:include, ::ActionController::SerializationAssertions)
+      end
     end
   end
 rescue LoadError
